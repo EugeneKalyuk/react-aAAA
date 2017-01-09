@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import Comments from '../../component/comments/comments';
-import InputCommit from '../../component/input/input'
+import Form from '../../component/form/form';
 
 
 if (global.IS_BROWSER) {
@@ -8,12 +8,15 @@ if (global.IS_BROWSER) {
 }
 
 class GuestBook extends Component {
+
+
   render() {
+
     return (
       <div className='guestbook'>
         <h1>GuestBook</h1>
-        <Comments/>
-        <InputCommit/>
+          <Comments/>
+          <Form />
       </div>
     );
   }
