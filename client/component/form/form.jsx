@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import { Field, reduxForm } from 'redux-form';
 import {connect} from 'react-redux';
 
+import {newMessage} from '../comments/actions'
 
 if (global.IS_BROWSER) {
 	require('./form.styl');
@@ -24,12 +25,18 @@ const checkSymbols = values => {
 		numbers.text = (300 - values.numbers.length)
 	}
 	return numbers
-}
+};
 
 class Form extends Component {
 	constructor(props) {
-		super(props)
+		super(props);
+
+		this.submitHandler = this.submitHandler.bind(this);
 	};
+
+	submitHandler(values) {
+		newMessage(values)
+	}
 
 	renderName = ({ input, label, type, meta : { touched, error }}) => (
 		<div>
@@ -53,26 +60,20 @@ class Form extends Component {
 		</div>
 	);
 
-	stopEvent = (e) => {
-		e.preventDefault();
-		console.log(this);
-		return false
-	};
-
 	render (){
-		const {handelForm, reset, dispatch, submitFailed} = this.props;
-
+		const {handleSubmit, pristine, submitting} = this.props;
 		return (
-			<form onSubmit={handelForm} className="col-md-12">
+			<form onSubmit={handleSubmit(this.submitHandler)} className="col-md-12">
 				<Field name="name" component={this.renderName} type="text" label="Name"/>
 				<Field name="text" component={this.renderText}  label="Message"/>
-				<button type="submit"  className="input__input-btn" onClick={this.stopEvent.bind(this)}>Submit</button>
+				<button type="submit"  className="input__input-btn" disabled={pristine || submitting} >Submit</button>
+
 			</form>
 		)
 	}
 }
 
-export default connect(
+export default  connect(
 	state => ({
 		prop: state.prop
 	})
